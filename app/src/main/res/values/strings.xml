@@ -5,4 +5,5 @@
     <string name="filtersHint">Filters[0&#8211;24]</string>
     <string name="intensityHint">Intensity[0&#8211;1]</string>
     <string name="cRHint">compressRate[0&#8211;1]</string>
+    <string name="playBtn">Play</string>
 </resources>
