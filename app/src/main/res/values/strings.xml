@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ImageKitMedium</string>
+    <string name="pickImage">Pick Image</string>
+    <string name="filterImage">Filter</string>
+    <string name="filtersHint">Filters[0&#8211;24]</string>
+    <string name="intensityHint">Intensity[0&#8211;1]</string>
+    <string name="cRHint">compressRate[0&#8211;1]</string>
 </resources>
