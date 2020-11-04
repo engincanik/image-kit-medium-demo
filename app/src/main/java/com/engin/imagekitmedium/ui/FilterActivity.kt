@@ -13,24 +13,22 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.engin.imagekitmedium.R
+import com.engin.imagekitmedium.base.IKMBaseActivity
 import com.engin.imagekitmedium.utils.Constants
 import com.huawei.hms.image.vision.ImageVision
 import com.huawei.hms.image.vision.ImageVision.VisionCallBack
 import com.huawei.hms.image.vision.ImageVisionImpl
+import com.huawei.hms.image.vision.crop.CropLayoutView
 import kotlinx.android.synthetic.main.activity_filter.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class FilterActivity : AppCompatActivity() {
-    private var string =
-        "{\"projectId\":\"736430079244660731\",\"appId\":\"103016511\",\"authApiKey\":\"CgB6e3x9ZHxBDSUl7OehcDajdvJ537nP5bWuOPsW50rgjeIa5JHf1j1cVmfDcxOtrV1OSs3C7ZvDQBE+7emkedAy\",\"clientSecret\":\"8F7A6631E56C5A5A82F45D818D637CDFF93AF891877274AA659C3BF92CED95F2\",\"clientId\":\"469387083497080000\",\"token\":\"tokenTest\"}"
-    private var authJson: JSONObject? = null
+class FilterActivity : IKMBaseActivity() {
     var imageVisionAPI: ImageVisionImpl? = null
     private var bitmap: Bitmap? = null
     private var initCode = -1
@@ -44,20 +42,18 @@ class FilterActivity : AppCompatActivity() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
+    lateinit var cropLayoutView: CropLayoutView;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filter)
-        try {
-            authJson = JSONObject(string)
-        } catch (e: JSONException) {
-            Log.e(Constants.logTag, e.toString())
-        }
+        initAuthJson()
         initImageVisionAPI(this)
         filterVal = findViewById(R.id.filterVal)
         intensityVal = findViewById(R.id.intensityVal)
         cRVal = findViewById(R.id.cRVal)
+        cropLayoutView = findViewById(R.id.cropImageView)
     }
 
 
@@ -117,6 +113,7 @@ class FilterActivity : AppCompatActivity() {
                             val uri: Uri? = data.data
                             imageView!!.setImageURI(uri)
                             bitmap = (imageView!!.drawable as BitmapDrawable).bitmap
+                            setCropLayoutView(bitmap!!)
                         } catch (e: Exception) {
                             Log.e(Constants.logTag, e.toString())
                         }
@@ -173,6 +170,7 @@ class FilterActivity : AppCompatActivity() {
                     val image = visionResult.image
                     if (image != null) {
                         imageView!!.setImageBitmap(image)
+//                        setCropLayoutView(image)
                     } else {
                         toastOnUIThread("There is a problem, image not filtered please try again later.")
                     }
@@ -183,6 +181,17 @@ class FilterActivity : AppCompatActivity() {
             }
         }
         executorService.execute(runnable)
+    }
+
+    private fun setCropLayoutView(selectedImage: Bitmap) {
+        cropLayoutView.setImageBitmap(selectedImage)
+    }
+
+    fun rotateIV(view: View) {
+        val bitmap = cropLayoutView.croppedImage
+        imageView.setImageBitmap(bitmap)
+        imageView.visibility = View.VISIBLE
+        cropLayoutView.visibility = View.INVISIBLE
     }
 
 

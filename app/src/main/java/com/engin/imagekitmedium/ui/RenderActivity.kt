@@ -9,24 +9,19 @@ import android.widget.AdapterView
 import android.widget.FrameLayout
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.engin.imagekitmedium.R
+import com.engin.imagekitmedium.base.IKMBaseActivity
 import com.engin.imagekitmedium.utils.Constants
 import com.engin.imagekitmedium.utils.Utils
 import com.huawei.hms.image.render.ImageRender
 import com.huawei.hms.image.render.ImageRenderImpl
 import com.huawei.hms.image.render.ResultCode
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.File
 
 
-class RenderActivity : AppCompatActivity() {
-    private var string =
-        "{\"projectId\":\"736430079244660731\",\"appId\":\"103016511\",\"authApiKey\":\"CgB6e3x9ZHxBDSUl7OehcDajdvJ537nP5bWuOPsW50rgjeIa5JHf1j1cVmfDcxOtrV1OSs3C7ZvDQBE+7emkedAy\",\"clientSecret\":\"8F7A6631E56C5A5A82F45D818D637CDFF93AF891877274AA659C3BF92CED95F2\",\"clientId\":\"469387083497080000\",\"token\":\"tokenTest\"}"
-    private var authJson: JSONObject? = null
+class RenderActivity : IKMBaseActivity() {
     var sourcePath: String? = null
     private val sourcePathName = "sources"
     var imageRenderAPI: ImageRenderImpl? = null
@@ -53,14 +48,6 @@ class RenderActivity : AppCompatActivity() {
                 Log.e(Constants.logTag, "Error Code: $errorCode")
             }
         })
-    }
-
-    private fun initAuthJson() {
-        try {
-            authJson = JSONObject(string)
-        } catch (e: JSONException) {
-            Log.e(Constants.logTag, e.toString())
-        }
     }
 
     fun initRenderView() {
